@@ -1,4 +1,4 @@
-const User = require('./model/userModel')
+const User = require("../model/userModel.js")
 
 const regUser = async(req, res)=>{
     try {
@@ -29,3 +29,5 @@ const regUser = async(req, res)=>{
         res.status(400).json({error: "Invalid user data"}) 
     }
 }
+
+module.exports = {regUser}

@@ -2,9 +2,11 @@ const express = require('express')
 const app = express()
 const port = 9000 
 const connectDb = require('./config/db.js')
+const userRoute = require('./routes/userRoute.js')
 
 connectDb()
 
+app.use(express.json())
 
 app.get('/api', (req,res)=>
 {
@@ -17,7 +19,7 @@ app.get('/api/users', (req,res)=>
 })
 
 
-
+app.use("/api", userRoute)
 
 
 
