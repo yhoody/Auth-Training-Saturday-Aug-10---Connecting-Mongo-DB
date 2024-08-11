@@ -39,22 +39,32 @@ const regUser = async(req, res)=>{
     }
 }
 
-// const authUser = async(req, res) => {
-//     try {
-//         const {email, password} = req.body
-//         const User = await User.login({email, password})
+const authUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
 
-//         if(email && password){
-//             return res.status(201).json({
-//                 _id: User._id
-//                 email: User.email, 
-//             })
-//         }
+        if (user && await user.matchPassword(password)) {
+            const token = generateToken(user._id);
+            res.cookie('jwt', token, {
+                httpOnly: true,
+                sameSite: 'strict',
+                maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+                secure: process.env.NODE_ENV !== 'development',
+            });
+            res.status(200).json({
+                success: "User authenticated successfully",
+                _id: user._id,
+                fullName: user.fullName,
+                token,
+            });
+        } else {
+            res.status(401).json({ error: "Invalid email or password" });
+        }
+    } catch (error) {
+        res.status(400).json({ error: "Invalid user data" });
+    }
+};
 
-//     } catch (error) {
-        
-//     }
-// }
 
-
-module.exports = {regUser}
+module.exports = {regUser, authUser}

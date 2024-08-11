@@ -38,5 +38,10 @@ userSchema.pre('save', async function (next){
 })
 
 
+// method to compare entered pwd with encrypted pwd
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword,this.password)
+}
+
 
 module.exports = mongoose.model('User', userSchema)
