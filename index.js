@@ -1,12 +1,16 @@
 const express = require('express')
+require('dotenv').config()
 const app = express()
-const port = 9000 
+const port = process.env.PORT 
 const connectDb = require('./config/db.js')
 const userRoute = require('./routes/userRoute.js')
+
 
 connectDb()
 
 app.use(express.json())
+
+app.use(express.urlencoded({extended: true}))
 
 app.get('/api', (req,res)=>
 {
@@ -25,5 +29,5 @@ app.use("/api", userRoute)
 
 app.listen(port, ()=>
 {
-    console.log(`Server started succesfully on http://localhost:${port}`)
+    console.log(`Server started succesfully on http://localhost:${port}/api`)
 }) 

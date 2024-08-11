@@ -1,9 +1,10 @@
 // Using Node.js `require()`
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 const connectDb = async () => {
     try {
-        const connect = await mongoose.connect('mongodb+srv://kulkomzy:authtraining@cluster0.3j0jl.mongodb.net/')
+        const connect = await mongoose.connect(process.env.MONGO_URI)
         if(connect) {
             console.log('Mongo DB connected successfully');
         }
