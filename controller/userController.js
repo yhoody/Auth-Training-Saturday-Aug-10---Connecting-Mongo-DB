@@ -1,6 +1,8 @@
 const User = require("../model/userModel.js") 
 const generateToken = require("../util/generateToken.js")
 
+
+// Register a user
 const regUser = async(req, res)=>{
     try {
         const {fullName, email, phone, password} = req.body
@@ -24,7 +26,7 @@ const regUser = async(req, res)=>{
             })
             res.status(201).json(
                 {
-                success: "User Registered successfullly",
+                success: "User Registered successfully",
                 _id: newUser._id,
                 fullName: newUser.fullName,
                 email: newUser.email,
@@ -39,10 +41,11 @@ const regUser = async(req, res)=>{
     }
 }
 
+// Login a user
 const authUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }); 
 
         if (user && await user.matchPassword(password)) {
             const token = generateToken(user._id);
@@ -67,4 +70,15 @@ const authUser = async (req, res) => {
 };
 
 
-module.exports = {regUser, authUser}
+// Logout user
+const logoutUser = (req, res) => {
+    res.cookie('jwt',"",{
+        httpOnly: true,
+        expires: new Date(0)
+    })
+    res.status(200).json({
+        success: "Logged out successfully" 
+    })
+}
+
+module.exports = {regUser, authUser, logoutUser}
